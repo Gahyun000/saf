@@ -1,0 +1,329 @@
+<!--
+/*****************************************************************************/
+/*                                                                           */
+/*            DVLab (Data Visualization Lab) Web version 1.0                 */
+/*                                                                           */
+/*****************************************************************************/
+/*****************************************************************************/
+/*                                                                           */
+/*  File Name         : index.html                                           */
+/*                                                                           */
+/*  Description       : This file contains all the necessary constants ,     */
+/*                      type definitions according to CAST specifications,	 */
+/*                      common system headers.                               */
+/*                                                                           */
+/*                                                                           */
+/*  Issues / Problems : None                                                 */
+/*                                                                           */
+/*  Revision History  :                                                      */
+/*                                                                           */
+/*        DD MM YYYY   Author(s)        Changes (Describe the changes made)  */
+/*        06 01 2019   Shin Seunghyeok  Draft                                */
+/*        15 11 2019   Shin Seunghyeok  Final Draft                          */
+/*                                                                           */
+/*****************************************************************************/
+-->
+<!DOCTYPE HTML>
+
+<html>
+<head>
+<meta charset="UTF-8">
+<link type="text/css" href="index.css" rel="stylesheet" media="screen" />
+<link type="text/css" href="common.css" rel="stylesheet" media="screen" />
+
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script type="text/javascript" src="common.js"></script>
+<script type="text/javascript" src="jsMap.js"></script>
+<script type="text/javascript" src="index.js"></script>
+
+<!-----------------
+<script>
+  (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
+    key: AIzaSyCjni6xW_4sa1Q3eqJfjhVfqHMFPSlteZQ,
+    v: "weekly",
+  });
+</script>
+---------------------->
+<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjni6xW_4sa1Q3eqJfjhVfqHMFPSlteZQ&callback=initMap"></script>
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<title>System Dashboard</title>
+</head>
+
+<body style="margin:0px;">
+
+<button onclick="startNewScenario()">새 시나리오 시작</button>
+<input id="scenarioInput" placeholder="시나리오 번호 입력">
+<button onclick="loadScenarioMovement(document.getElementById('scenarioInput').value)">
+    이동 기록 불러오기
+</button>
+
+</style>
+<div
+  id="wss_ip"
+  style="display:none;"
+>
+<script>
+/**
+  var url = window.location.host;
+  var host = url.split(':');
+  $('#wss_ip').text(host[0]);
+**/
+  $('#wss_ip').text("127.0.0.1");
+</script>
+</div>
+
+
+<div
+  id="wss_port"
+  style="display:none"
+>8090</div>
+
+
+
+
+<!--div id="page" style="width:1900px;height:980px;background-color:#FFFFFF"-->
+<div id="page" style="width:1920px; height:1080px; background-color:#ACACAC">
+
+  <div class="horizontalLine" ></div>
+  <div id="clock_back" style="position:relative; width:100%; height:20px; margin:0 auto; background-color:#234567;color:#FFFFFF" >
+  </div>
+  <div class="horizontalLine" style="background-color:#FFFFFF; height:5px"></div>
+  <div id="graph_back_0" style="position:relative; float:left; width:100%; height:100%;background-color:#000000;color:#FFFFFF" >
+
+    <div style="position:relative; float:left; width:200px; height:100%; background-color:#5F5F5F" >
+    </div>
+
+    <div class="verticalLine" style="background-color:#FFFFFF; width:5px"></div>
+
+    <div id='map' style="position:relative; float:left; width:1510px; height:100%; background-color:#5F5F5F" >
+    </div>
+
+    <div class="verticalLine" style="background-color:#FFFFFF; width:5px"></div>
+
+    <div style="position:relative; float:left; width:200px; height:100%; background-color:#5F5F5F" >
+
+      <div style="position:relative; float:left; width:100%; height:10px; margin:0 auto;"></div>
+      <div style="position:relative; float:left; width:10px; height:20px; margin:0 auto;"></div>
+      <div id="id" style="position:relative; float:left; width:180px; height:20px; color:#FFFF00; background-color:#000000; border:2px solid #FFFFFF; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align:center" ></div>
+
+      <div style="position:relative; float:left; width:100%; height:10px; margin:0 auto;"></div>
+
+      <div style="position:relative; float:left; width:10px; height:20px; margin:0 auto;"></div>
+      <select id="cbxCircleColor" style="position:relative; float:left; width:85px; height:20px; color:#FFFF00; background-color:#000000; border:2px solid #FFFFFF; text-algin:center"  onchange="onCbxCircleColorChange()">
+        <option value="BLUE" style="text-align:center" >BLUE</option>
+        <option value="RED" style="text-align:center" >RED</option>
+      </select>
+
+      <div style="position:relative; float:left; width:10px; height:20px; margin:0 auto;"></div>
+
+      <select id="cbxCircleType" style="position:relative; float:left; width:85px; height:20px; color:#FFFF00; background-color:#000000; border:2px solid #FFFFFF; text-algin:center"  onchange="onCbxCircleTypeChange()">
+        <option value="Drone" style="text-align:center" >Drone</option>
+        <option value="Soldier" style="text-align:center" >Soldier</option>
+      </select>
+
+      <div style="position:relative; float:left; width:100%; height:10px; margin:0 auto;"></div>
+
+      <div style="position:relative; float:left; width:10px; height:20px; margin:0 auto;"></div>
+      <select id="cbxShape" style="position:relative; float:left; width:85px; height:20px; color:#FFFF00; background-color:#000000; border:2px solid #FFFFFF; text-algin:center"  onchange="onCbxShapeChange()">
+        <option value="Circle" style="text-align:center" >Circle</option>
+        <option value="Path" style="text-align:center" >Path</option>
+        <option value="Rectangle" style="text-align:center" >Rectangle</option>
+      </select>
+
+
+      <div style="position:relative; float:left; width:100%; height:30px; margin:0 auto;"></div>
+
+
+
+      <div style="position:relative; float:left; width:8px; height:20px; margin:0 auto;"></div>
+      <div id="edtOriginTitle" contenteditable="false" style="position:relative; float:left; width:180px; height:20px; color:#FFFFFF; background-color:transparent; border:0px solid #FFFFFF; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align:center; font-weight:bold;" >Origin</div>
+
+      <div style="position:relative; float:left; width:100%; height:10px; margin:0 auto;"></div>
+      <div style="position:relative; float:left; width:8px; height:20px; margin:0 auto;"></div>
+      <div id="edtCircleLat" contenteditable="true" style="position:relative; float:left; width:180px; height:20px; color:#FFFF00; background-color:#000000; border:2px solid #FFFFFF; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align:center" ></div>
+
+      <div style="position:relative; float:left; width:100%; height:10px; margin:0 auto;"></div>
+      <div style="position:relative; float:left; width:8px; height:20px; margin:0 auto;"></div>
+      <div id="edtCircleLng" contenteditable="true" style="position:relative; float:left; width:180px; height:20px; color:#FFFF00; background-color:#000000; border:2px solid #FFFFFF; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align:center" ></div>
+
+      <div style="position:relative; float:left; width:100%; height:10px; margin:0 auto;"></div>
+      <div style="position:relative; float:left; width:8px; height:20px; margin:0 auto;"></div>
+      <div id="edtCircleAlt" contenteditable="true" style="position:relative; float:left; width:180px; height:20px; color:#FFFF00; background-color:#000000; border:2px solid #FFFFFF; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align:center" ></div>
+
+      <div style="position:relative; float:left; width:100%; height:10px; margin:0 auto;"></div>
+      <div style="position:relative; float:left; width:8px; height:20px; margin:0 auto;"></div>
+      <div id="edtCircleColor" contenteditable="true" style="position:relative; float:left; width:180px; height:20px; color:#FFFF00; background-color:#000000; border:2px solid #FFFFFF; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align:center" ></div>
+
+      <div style="position:relative; float:left; width:100%; height:10px; margin:0 auto;"></div>
+      <div style="position:relative; float:left; width:8px; height:20px; margin:0 auto;"></div>
+      <div id="edtCircleRadius" contenteditable="true" style="position:relative; float:left; width:180px; height:20px; color:#FFFF00; background-color:#000000; border:2px solid #FFFFFF; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align:center" >1000</div>
+
+      <div style="position:relative; float:left; width:100%; height:10px; margin:0 auto;"></div>
+      <div style="position:relative; float:left; width:8px; height:20px; margin:0 auto;"></div>
+      <div id="edtCircleSpeed" contenteditable="true" style="position:relative; float:left; width:180px; height:20px; color:#FFFF00; background-color:#000000; border:2px solid #FFFFFF; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align:center" >100</div>
+
+
+      <div style="position:relative; float:left; width:100%; height:100px; margin:0 auto;"></div>
+
+      <div style="position:relative; float:left; width:100%; height:10px; margin:0 auto;"></div>
+      <div style="position:relative; float:left; width:8px; height:20px; margin:0 auto;"></div>
+      <div id="edtTargetTitle" contenteditable="false" style="position:relative; float:left; width:180px; height:20px; color:#FFFFFF; background-color:transparent; border:0px solid #FFFFFF; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align:center; font-weight:bold;" >Target</div>
+
+      <div style="position:relative; float:left; width:100%; height:10px; margin:0 auto;"></div>
+      <div style="position:relative; float:left; width:8px; height:20px; margin:0 auto;"></div>
+      <div id="did" style="position:relative; float:left; width:180px; height:20px; color:#FF0000; background-color:#000000; border:2px solid #FF0000; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align:center" ></div>
+
+      <div style="position:relative; float:left; width:100%; height:10px; margin:0 auto;"></div>
+      <div style="position:relative; float:left; width:8px; height:20px; margin:0 auto;"></div>
+      <div id="edtDstCircleLat" contenteditable="true" style="position:relative; float:left; width:180px; height:20px; color:#FF0000; background-color:#000000; border:2px solid #FF0000; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align:center" ></div>
+
+      <div style="position:relative; float:left; width:100%; height:10px; margin:0 auto;"></div>
+      <div style="position:relative; float:left; width:8px; height:20px; margin:0 auto;"></div>
+      <div id="edtDstCircleLng" contenteditable="true" style="position:relative; float:left; width:180px; height:20px; color:#FF0000; background-color:#000000; border:2px solid #FF0000; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align:center" ></div>
+
+      <div style="position:relative; float:left; width:100%; height:10px; margin:0 auto;"></div>
+      <div style="position:relative; float:left; width:8px; height:20px; margin:0 auto;"></div>
+      <div id="edtDstCircleAlt" contenteditable="true" style="position:relative; float:left; width:180px; height:20px; color:#FF0000; background-color:#000000; border:2px solid #FF0000; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align:center" ></div>
+
+      <div style="position:relative; float:left; width:100%; height:10px; margin:0 auto;"></div>
+      <div style="position:relative; float:left; width:8px; height:20px; margin:0 auto;"></div>
+      <div id="edtDistance" contenteditable="false" style="position:relative; float:left; width:180px; height:20px; color:#FF0000; background-color:#000000; border:2px solid #FF0000; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align:center" ></div>
+
+      <div style="position:relative; float:left; width:100%; height:10px; margin:0 auto;"></div>
+      <div style="position:relative; float:left; width:8px; height:20px; margin:0 auto;"></div>
+      <div id="edtDistancePerSec" contenteditable="false" style="position:relative; float:left; width:180px; height:20px; color:#FF0000; background-color:#000000; border:2px solid #FF0000; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align:center" ></div>
+
+
+      <div style="position:relative; float:left; width:100%; height:10px; margin:0 auto;"></div>
+      <div style="position:relative; float:left; width:8px; height:20px; margin:0 auto;"></div>
+      <div id="btnMove" style="cursor: pointer; position:relative; float:left; width:80px; height:20px; color:#000000; background-color:#AAAAAA; border:2px solid #FFFFFF; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align:center;" onclick="onButtonMoveClick()" onmouseover="onButtonMoveMouseOver()" onmouseout="onButtonMoveMouseOut()">MOVE</div>
+      <div style="position:relative; float:left; width:8px; height:20px; margin:0 auto;"></div>
+      <div id="btnStop" style="cursor: pointer; position:relative; float:left; width:80px; height:20px; color:#000000; background-color:#AAAAAA; border:2px solid #FFFFFF; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align:center;" onclick="onButtonStopClick()" onmouseover="onButtonStopMouseOver()" onmouseout="onButtonStopMouseOut()">STOP</div>
+
+      <div style="position:relative; float:left; width:100%; height:10px; margin:0 auto;"></div>
+      <div style="position:relative; float:left; width:8px; height:20px; margin:0 auto;"></div>		
+      <div style="position:relative; float:left; width:100%; height:10px; margin:0 auto;"></div>
+      <div style="position:relative; float:left; width:8px; height:20px; margin:0 auto;"></div>
+      <div id="btnDelete" style="cursor: pointer; position:relative; float:left; width:80px; height:20px; color:#000000; background-color:#AAAAAA; border:2px solid #FFFFFF; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align:center;" onclick="onButtonDeleteClick()" onmouseover="onButtonDeleteMouseOver()" onmouseout="onButtonDeleteMouseOut()">DEL</div>
+
+
+    </div>
+	<div id="replayBar">
+  <button id="btnReplayPlay" onclick="toggleReplay()">▶</button>
+  <button id="btnReplayStop" onclick="stopReplay()">■</button>
+
+  <input id="replaySeek" type="range" min="0" max="100" value="0" />
+  <div id="replaySpeedWrap">
+  <button id="btnReplaySpeed" type="button">⚙</button>
+  <div id="replaySpeedMenu">
+    <button type="button" data-speed="1">1x</button>
+    <button type="button" data-speed="2">2x</button>
+    <button type="button" data-speed="4">4x</button>
+    <button type="button" data-speed="8">8x</button>
+    <button type="button" data-speed="16">16x</button>
+    <button type="button" data-speed="32">32x</button>
+    <button type="button" data-speed="64">64x</button>
+  </div>
+</div>
+  <span id="replayTime">0 / 0</span>
+</div>
+#replaySpeedWrap{
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+#btnReplaySpeed{
+  height: 40px;
+  padding: 0 12px;
+  cursor: pointer;
+}
+
+#replaySpeedMenu{
+  position: absolute;
+  right: 0;
+  bottom: 52px;            /* 바 위로 뜨게 */
+  background: rgba(20,20,20,0.96);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  padding: 6px;
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 90px;
+  z-index: 999999;
+}
+
+#replaySpeedMenu.open{ display: flex; }
+
+#replaySpeedMenu button{
+  height: 34px;
+  padding: 0 10px;
+  text-align: left;
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+#replaySpeedMenu button:hover{
+  background: rgba(255,255,255,0.10);
+}
+
+#replaySpeedMenu button.active{
+  border-color: rgba(255,255,255,0.55);
+  background: rgba(255,255,255,0.12);
+}
+
+
+<style>
+  #replayBar{
+    height: 64px;
+    width: 100%;
+    background: rgba(20,20,20,0.92);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    box-sizing: border-box;
+    z-index: 99999;
+  }
+  #replayBar button{
+    height: 40px;
+    padding: 0 14px;
+    cursor: pointer;
+  }
+  #replayScenarioInput{
+    width: 140px;
+    height: 38px;
+    padding: 0 10px;
+  }
+  #replaySeek{
+    flex: 1;
+    height: 6px;
+  }
+  #replayTime{
+    color: #fff;
+    min-width: 90px;
+    text-align: right;
+  }
+  </div>
+
+
+</div> <!-- page -->
+
+
+
+</body>
+
+
+
+
+</html>
+
+
